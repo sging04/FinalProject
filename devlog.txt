@@ -1,0 +1,12 @@
+Magikarp - Sean Ging, Haotian Gan, Reng geng Zheng, Wen Hao Dong
+Softdev
+P02
+2022-03-04
+
+Sample Entry: firstL -- TIMESTAMP\n ( e.g.: topherM -- 1999-12-31 23:59 )
+
+Begin Devlog:
+
+seanG -- 2022-05-24 08:19am
+  - Devlog txt. Working on proper implementation of project: REACT, flask, 
+    apache.

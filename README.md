@@ -15,6 +15,12 @@ A flask/react website that allows you to upload your old school files for other 
 Enter the following commands
 
 ```
-
+$ git clone https://github.com/sging04/Magikarp_wdong20_hgan20_sging20_rzheng21
+$ cd FinalProject
+$ pip3 install -r requirements.txt
+$ python3 -m venv <name>
+$ source <name>/bin/activate
+$ cd app
+$ python3 __init__.py
 ```
 

@@ -8,6 +8,7 @@ import pytesseract
 from werkzeug.utils import secure_filename
 import os
 
+
 #--------
 # config stuffs dont touch!
 

@@ -7,6 +7,7 @@ from flask import Flask, jsonify, request
 import pytesseract
 from werkzeug.utils import secure_filename
 import os
+import json
 
 #--------
 # config stuffs dont touch!
@@ -15,7 +16,7 @@ app = Flask(__name__)
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe' 
 #might make a config file for this ^^^ will update
-UPLOAD_FOLDER = "/uploads"
+UPLOAD_FOLDER = "C:\\Users\\pging\\Desktop\\Final Project\\FinalProject\\microservices\\tesseract\\uploads\\"
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg"]
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #---------
@@ -66,7 +67,7 @@ def renderImage(path):
 			"rendered_text":None
 			})
 
-@app.route("/api/", methods=['GET'])
+@app.route("/api", methods=['GET'])
 def index():
 	'''
 	Testing if server is alive; don't use in production
@@ -109,6 +110,8 @@ def render():
 
 	#checking if file has correct file path
 
+	filename = secure_filename(request.files['file'].filename)
+
 	if filename.rsplit(".", 1)[1].lower() not in ALLOWED_EXTENSIONS:
 		return jsonify({
 			"error":True,
@@ -140,11 +143,11 @@ def render():
 				return jsonify({
 	            	"error":False,
 	            	"error_message": None,
-	            	"result":result
+	            	"result": json.loads(result.data)["rendered_text"]
 	            	})
-			except:
+			except Exception as e:
 				return jsonify({"error":True,
-	            	"error_message": None,
+	            	"error_message": str(e),
 	            	"result":None
 	            	})
 

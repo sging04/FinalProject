@@ -1,5 +1,11 @@
- Enter a username and password.
-    <form action="/signup">
+<!DOCTYPE html>
+{% extends "login.html" %}
+  <html>
+  <head>
+        <title></title>
+  </head>
+  <body>
+      <form action="/signup">
       <h4>Username: </h4>
       <input type="text" name="username">
       <br>
@@ -11,4 +17,7 @@
       <input type="submit" name="sub1" value="Sign Up">
       <br>
       <br>
-      <a href="/loging.html">Already Have an Account? Log in</a>
+      <a href="/login.html">Already Have an Account? Log in</a>
+  
+  </body>
+  </html>  

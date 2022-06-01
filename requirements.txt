@@ -4,3 +4,4 @@ redis
 rq
 pytesseract
 pytest
+gunicorn

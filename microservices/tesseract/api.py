@@ -9,14 +9,16 @@ from werkzeug.utils import secure_filename
 import os
 import json
 
+from setup import TESSERACT_LOCATION, UPLOAD_FOLDER
+
 #--------
 # config stuffs dont touch!
 
 app = Flask(__name__)
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe' 
+pytesseract.pytesseract.tesseract_cmd = "/usr/local/Cellar/tesseract/5.1.0/bin/tesseract"
 #might make a config file for this ^^^ will update
-UPLOAD_FOLDER = "C:\\Users\\pging\\Desktop\\Final Project\\FinalProject\\microservices\\tesseract\\uploads\\"
+UPLOAD_FOLDER = "/Users/user/Desktop/Final Proj/FinalProject/microservices/tesseract/uploads"
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg"]
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #---------

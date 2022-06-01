@@ -9,11 +9,14 @@ import pytesseract
 import os
 import shutil #https://docs.python.org/3/library/shutil.html
 
+
+from setup import TESSERACT_LOCATION
+
+
 #https://flask.palletsprojects.com/en/2.1.x/testing/
 
 #config stuff
-pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe' 
-
+pytesseract.pytesseract.tesseract_cmd = TESSERACT_LOCATION
 ##############
 
 
@@ -74,7 +77,7 @@ def test_renderImage_and_removeImage():
 		shutil.rmtree(copy) #removing the temporary folder
 
 def main():
-	test_Index()
+	#test_Index()
 	test_renderImage_and_removeImage()
 
 

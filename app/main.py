@@ -58,6 +58,14 @@ def home():
         decks = [1,2,3,3]
         )
 
+@app.route("/logout")
+def logout():
+    #if "username" in session:
+    session["username"] = None
+    session.pop("username", None)
+    return redirect('/')
+
+
 
 @app.route("/create", methods=["GET", "POST"])
 def create():
@@ -78,7 +86,7 @@ def create():
 
             response = r.request("POST", url, headers=headers, data={}, files=file)
 
-            if not response["error"]: 
+            if not response["error"]:
                 text += response["result"]
 
         return render_template("edit.html", text=text)

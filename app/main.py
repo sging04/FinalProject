@@ -17,7 +17,7 @@ userpass = UsernamePasswordTable(db_file, "userpass")
 @app.route("/",  methods=["GET"])
 def disp_loginpage():
     if (not session.get("username") is None):
-        # if 
+        # if
         # if there's an existing session, shows welcome page
         if request.method == "GET":
             # if there's an existing session, shows welcome page
@@ -41,6 +41,15 @@ def signup():
         session["username"]=username
         return redirect("/home", username=session.get("username"))
 
+@app.route("/create", methods=["GET"])
+def create():
+    # if session['username'] is not none:
+    #     redirect("/")
+    # for form in formFileMultiple:
+    #     form= request.args["file"]
+    return render_template("create.html" )
+
+
 @app.route("/home", methods=["GET"])
 def home():
     return render_template(
@@ -48,4 +57,3 @@ def home():
         username=session.get("username"),
         decks = [1,2,3,3]
         )
-

@@ -49,3 +49,28 @@ def home():
         decks = [1,2,3,3]
         )
 
+
+@app.route("/create", methods=["GET", "POST"])
+def create():
+    if request.method == "GET":
+        pass
+    elif request.method == "POST":
+        files = request.files.getlist("files")
+
+        text = ""
+
+        for file in files:
+            url = "/api/render"
+
+            files = {"file": (open(file, "rb"))}
+            headers = {
+                "accept" : "application/json"
+            }
+
+            response = r.request("POST", url, headers=headers, data={}, files=file)
+
+            if not response["error"]: 
+                text += response["result"]
+
+        return render_template("edit.html", text=text)
+

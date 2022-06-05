@@ -2,8 +2,8 @@ from flask import Flask, request, redirect, session, render_template, url_for
 import json
 import os
 import sqlite3
-
-from database import UsernamePasswordTable #using database classes
+import requests as r 
+from database import UsernamePasswordTable, QuestionSetTable #using database classes
 
 app= Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -12,6 +12,7 @@ db_file = "data.db"
 
 
 userpass = UsernamePasswordTable(db_file, "userpass")
+decks = QuestionSetTable(db_file, "decks")
 
 
 @app.route("/",  methods=["GET"])
@@ -43,10 +44,11 @@ def signup():
 
 @app.route("/home", methods=["GET"])
 def home():
+
     return render_template(
         "home.html",
         username=session.get("username"),
-        decks = [1,2,3,3]
+        decks = decks.getRandomEntries(10)
         )
 
 

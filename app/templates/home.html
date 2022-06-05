@@ -2,12 +2,30 @@
 
 	{% block content %}
 
-		<h1>Welcome {{ username }}</h1>
+		<h1 style="text-align: center;">Welcome {{ username }}</h1>
+		<br>
+		<h3 style="text-align: center;">Here are some study sets for you!</h3>
 
-		<h3>Here are some study sets for you!</h3>
+		<br><br>
+		<!-- 
 
+		(5, 'Test5', 'Test2', 'D', 'Content33')
+		-->
 		{% for deck in decks %}
-			<div>Hey</div>
+			<center>
+				<div class = "justify-content-left" style="width: 30%; text-align: left;">
+						<div class="card">
+							<h5 class="card-title mt-2">{{ deck[1] }}</h5>
+						    <h6 class="card-subtitle mb-2 text-muted">By {{ deck[2] }}</h6>
+						    <p class="card-text">{{ deck[3] }}</p>
+						    <center>
+						    	<a href="/viewDeck/{{ deck[0] }}" class="btn btn-primary" style="width: 40%;">View Deck!</a>
+						    </center>
+			    		</div>
+	    	    </div>
+    		</center>
+    		<br>
 		{% endfor %}
 
 	{% endblock %}
+

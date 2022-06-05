@@ -32,9 +32,9 @@ class QuestionSetTable:
 		self._db = sqlite3.connect(fileName, check_same_thread=False)
 		self._cursor = self._db.cursor()
 		self._name = name
-		self._cursor.execute(f"CREATE TABLE IF NOT EXISTS {self._name}(title TEXT, author TEXT, content TEXT, unique(title, content));")
+		self._cursor.execute(f"CREATE TABLE IF NOT EXISTS {self._name}(title TEXT, author TEXT, description TEXT,content TEXT, unique(title, content));")
 
-	def insert(self,title, author, content):
+	def insert(self,title, author, description,content):
 		'''
 		insert
 		insert username and password. DOES NOT CHECK if it is duplicate.
@@ -50,7 +50,7 @@ class QuestionSetTable:
 		#insert vales & committing them
 
 		try:
-			self._cursor.execute(f"INSERT INTO {self._name} VALUES(\"{title}\", \"{author}\", \"{content}\");")
+			self._cursor.execute(f"INSERT INTO {self._name} VALUES(\"{title}\", \"{author}\", \"{description}\" ,\"{content}\");")
 			self._db.commit()
 			return True
 		except:
@@ -74,6 +74,22 @@ class QuestionSetTable:
 		self._cursor.execute(f"SELECT rowid, * FROM {self._name} WHERE rowid = {id};")
 		return self._cursor.fetchone()
 
+	def getRandomEntries(self, limit):
+		'''
+		getRandomEntries
+
+		will return random entries of size limit
+
+		this function is of questionable speed will update
+
+		Args:
+			limit : int
+		returns
+			list of json rowid
+		'''
+
+		self._cursor.execute(f"SELECT rowid, * FROM {self._name} order BY RANDOM() LIMIT {limit};")
+		return self._cursor.fetchall()
 
 	def search(self, query):
 		'''

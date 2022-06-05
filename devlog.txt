@@ -16,3 +16,10 @@ patrickG -- 2022-05-30 / 2022-05-31
   - Working on the API Service, plus minor testing code.
   - Overall almost done with it. Now is time to integrate it into the actual codebase
   - Down the line I plan on adding in the extra queueing. It doesn't seem too bad, but tbh it's not major
+
+patrickG/seanG -- 2022-05-30 to 2022-06-05
+
+  - Forgot to update this oops!
+  - Finished the microservice
+  - Adding templating and the basic pathing
+  - to be updates

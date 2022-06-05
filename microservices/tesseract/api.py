@@ -9,6 +9,8 @@ from werkzeug.utils import secure_filename
 import os
 import json
 
+
+
 from setup import TESSERACT_LOCATION, UPLOAD_FOLDER
 
 #--------
@@ -145,7 +147,7 @@ def render():
 					return jsonify({
 		            	"error":False,
 		            	"error_message": None,
-		            	"result": json.loads(result.data)["rendered_text"]
+		            	"result": re.split("\n\n",json.loads(result.data)["rendered_text"])
 		            	})
 				except Exception as e:
 					return jsonify({"error":True,

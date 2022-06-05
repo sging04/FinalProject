@@ -2,8 +2,9 @@ from flask import Flask, request, redirect, session, render_template, url_for
 import json
 import os
 import sqlite3
+import requests as r 
+from database import UsernamePasswordTable, QuestionSetTable #using database classes
 
-from database import UsernamePasswordTable #using database classes
 
 app= Flask(__name__)
 app.secret_key = os.urandom(32)
@@ -12,6 +13,7 @@ db_file = "data.db"
 
 
 userpass = UsernamePasswordTable(db_file, "userpass")
+decks = QuestionSetTable(db_file, "decks")
 
 
 @app.route("/",  methods=["GET"])
@@ -41,21 +43,14 @@ def signup():
         session["username"]=username
         return redirect("/home", username=session.get("username"))
 
-@app.route("/create", methods=["GET"])
-def create():
-    # if session['username'] is not none:
-    #     redirect("/")
-    # for form in formFileMultiple:
-    #     form= request.args["file"]
-    return render_template("create.html" )
-
 
 @app.route("/home", methods=["GET"])
 def home():
+
     return render_template(
         "home.html",
         username=session.get("username"),
-        decks = [1,2,3,3]
+        decks = decks.getRandomEntries(10)
         )
 
 @app.route("/logout")
@@ -70,7 +65,8 @@ def logout():
 @app.route("/create", methods=["GET", "POST"])
 def create():
     if request.method == "GET":
-        pass
+        return render_template("create.html" )
+
     elif request.method == "POST":
         files = request.files.getlist("files")
 
@@ -90,3 +86,18 @@ def create():
                 text += response["result"]
 
         return render_template("edit.html", text=text)
+
+@app.route("/viewDeck/<id>", methods=["GET"])
+def viewDeck(id):
+    return render_template(
+        "viewDeck.html", 
+        data=decks.getDeckByID(id))
+
+
+
+
+
+
+
+
+

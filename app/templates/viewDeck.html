@@ -1,0 +1,11 @@
+{% extends "index.html" %}
+	
+	{% block content %}
+
+
+		{{% for card in deck  %}}
+
+			<h2>{{ card }}</h2>
+
+		{{% endfor %}}
+	{% endblock %}

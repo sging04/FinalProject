@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+
+
+  {%block content %}
+
+    <div class="mt-4 p-5 text-black rounded">
+      <img src="/static/golang.jpg" class="img-responsive">
+      <hr>
+      <bold> <h1>
+
+        Hello, upload your photos to use. </h1>
+        </bold>
+
+        <form action="/create">
+        <label for="formFileMultiple" class="form-label">Multiple files are supported</label>
+        <input class="form-control" type="file" id="formFileMultiple" multiple>
+        <form>
+          <button type="submit" id=:formFileMultiple class="btn btn-secondary mb-3">Submit </button>
+
+    </div>
+</div>
+
+
+
+
+
+
+  {% endblock %}

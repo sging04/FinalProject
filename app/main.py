@@ -18,7 +18,7 @@ decks = QuestionSetTable(db_file, "decks")
 @app.route("/",  methods=["GET"])
 def disp_loginpage():
     if (not session.get("username") is None):
-        # if 
+        # if
         # if there's an existing session, shows welcome page
         if request.method == "GET":
             # if there's an existing session, shows welcome page
@@ -41,6 +41,15 @@ def signup():
         userpass.insert(username, password) # committing actions to database must be done every time you commit a command
         session["username"]=username
         return redirect("/home", username=session.get("username"))
+
+@app.route("/create", methods=["GET"])
+def create():
+    # if session['username'] is not none:
+    #     redirect("/")
+    # for form in formFileMultiple:
+    #     form= request.args["file"]
+    return render_template("create.html" )
+
 
 @app.route("/home", methods=["GET"])
 def home():
@@ -75,4 +84,3 @@ def create():
                 text += response["result"]
 
         return render_template("edit.html", text=text)
-

@@ -2,7 +2,7 @@ from flask import Flask, request, redirect, session, render_template, url_for
 import json
 import os
 import sqlite3
-import requests as r 
+import requests as r
 from database import UsernamePasswordTable, QuestionSetTable #using database classes
 
 
@@ -90,14 +90,50 @@ def create():
 @app.route("/viewDeck/<id>", methods=["GET"])
 def viewDeck(id):
     return render_template(
-        "viewDeck.html", 
+        "viewDeck.html",
         data=decks.getDeckByID(id))
 
 
 
+app.secret_key = "secret key"
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
+# Get current path
+path = os.getcwd()
+# file Upload
+UPLOAD_FOLDER = os.path.join(path, 'uploads')
+
+# Make directory if uploads is not exists
+if not os.path.isdir(UPLOAD_FOLDER):
+    os.mkdir(UPLOAD_FOLDER)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Allowed extension you can set your own
+ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 
+@app.route('/upload', methods=['POST'])
+def upload_form():
+    return render_template('upload.html')
+def upload_file():
+    if request.method == 'POST':
 
+        if 'files[]' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
 
+        files = request.files.getlist('files[]')
 
+        for file in files:
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        flash('File(s) successfully uploaded')
+        return redirect('/viewDeck')

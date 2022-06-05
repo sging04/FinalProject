@@ -57,8 +57,6 @@ def home():
         username=session.get("username"),
         decks = [1,2,3,3]
         )
-<<<<<<< HEAD
-=======
 
 
 @app.route("/create", methods=["GET", "POST"])
@@ -84,5 +82,3 @@ def create():
                 text += response["result"]
 
         return render_template("edit.html", text=text)
-
->>>>>>> e4cdbf09d5bb3f73e7da3b31e55e6bce95802be2

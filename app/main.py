@@ -42,14 +42,6 @@ def signup():
         session["username"]=username
         return redirect("/home", username=session.get("username"))
 
-@app.route("/create", methods=["GET"])
-def create():
-    # if session['username'] is not none:
-    #     redirect("/")
-    # for form in formFileMultiple:
-    #     form= request.args["file"]
-    return render_template("create.html" )
-
 
 @app.route("/home", methods=["GET"])
 def home():
@@ -64,7 +56,8 @@ def home():
 @app.route("/create", methods=["GET", "POST"])
 def create():
     if request.method == "GET":
-        pass
+        return render_template("create.html" )
+
     elif request.method == "POST":
         files = request.files.getlist("files")
 
@@ -84,3 +77,18 @@ def create():
                 text += response["result"]
 
         return render_template("edit.html", text=text)
+
+@app.route("/viewDeck/<id>", methods=["GET"])
+def viewDeck(id):
+    return render_template(
+        "viewDeck.html", 
+        data=decks.getDeckByID(id))
+
+
+
+
+
+
+
+
+

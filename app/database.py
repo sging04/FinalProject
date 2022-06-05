@@ -72,7 +72,7 @@ class QuestionSetTable:
 		'''
 
 		self._cursor.execute(f"SELECT rowid, * FROM {self._name} WHERE rowid = {id};")
-		return self._cursor.fetchone()
+		return self._cursor.fetchall()
 
 	def getRandomEntries(self, limit):
 		'''

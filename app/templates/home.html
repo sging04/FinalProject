@@ -14,12 +14,12 @@
 		{% for deck in decks %}
 			<center>
 				<div class = "justify-content-left" style="width: 30%; text-align: left;">
-						<div class="card">
+						<div class="card" style="border: 2px solid black;">
 							<h5 class="card-title mt-2">{{ deck[1] }}</h5>
 						    <h6 class="card-subtitle mb-2 text-muted">By {{ deck[2] }}</h6>
 						    <p class="card-text">{{ deck[3] }}</p>
 						    <center>
-						    	<a href="/viewDeck/{{ deck[0] }}" class="btn btn-primary" style="width: 40%;">View Deck!</a>
+						    	<a href="/viewDeck/{{ deck[0] }}" class="btn btn-primary mb-2" style="width: 40%;">View Deck!</a>
 						    </center>
 			    		</div>
 	    	    </div>

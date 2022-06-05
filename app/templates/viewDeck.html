@@ -2,6 +2,10 @@
 	
 	{% block content %}
 
-		{{ data }}
 
+		{{% for card in deck  %}}
+
+			<h2>{{ card }}</h2>
+
+		{{% endfor %}}
 	{% endblock %}

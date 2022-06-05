@@ -5,6 +5,7 @@ import sqlite3
 import requests as r 
 from database import UsernamePasswordTable, QuestionSetTable #using database classes
 
+
 app= Flask(__name__)
 app.secret_key = os.urandom(32)
 

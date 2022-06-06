@@ -1,19 +1,42 @@
-from flask import Flask, request, redirect, session, render_template, url_for
+from flask import Flask, request, redirect, session, render_template, url_for, jsonify
 import json
 import os
 import sqlite3
 import requests as r
 from database import UsernamePasswordTable, QuestionSetTable #using database classes
 
+#misc imports
+import pytesseract
+from werkzeug.utils import secure_filename
+import os
+import json
+
+#######################
+#api stuff
+
+
+from setup import TESSERACT_LOCATION, UPLOAD_FOLDER
+
+#--------
+# config stuffs dont touch!
 
 app= Flask(__name__)
 app.secret_key = os.urandom(32)
 
 db_file = "data.db"
 
+pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR"
+#might make a config file for this ^^^ will update
+UPLOAD_FOLDER = "C:\\Users\\Gingm\\Desktop\\Finalproject\\FinalProject\\app\\uploads"
+ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg"]
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 userpass = UsernamePasswordTable(db_file, "userpass")
 decks = QuestionSetTable(db_file, "decks")
+#---------
+
+
 
 
 @app.route("/",  methods=["GET"])
@@ -62,30 +85,10 @@ def logout():
 
 
 
-@app.route("/create", methods=["GET", "POST"])
+@app.route("/create", methods=["GET"])
 def create():
-    if request.method == "GET":
-        return render_template("create.html" )
+    return render_template("create.html" )
 
-    elif request.method == "POST":
-        files = request.files.getlist("files")
-
-        text = ""
-
-        for file in files:
-            url = "/api/render"
-
-            files = {"file": (open(file, "rb"))}
-            headers = {
-                "accept" : "application/json"
-            }
-
-            response = r.request("POST", url, headers=headers, data={}, files=file)
-
-            if not response["error"]:
-                text += response["result"]
-
-        return render_template("edit.html", text=text)
 
 @app.route("/viewDeck/<id>", methods=["GET"])
 def viewDeck(id):
@@ -93,47 +96,144 @@ def viewDeck(id):
         "viewDeck.html",
         data=decks.getDeckByID(id))
 
-
-
-app.secret_key = "secret key"
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-
-# Get current path
-path = os.getcwd()
-# file Upload
-UPLOAD_FOLDER = os.path.join(path, 'uploads')
-
-# Make directory if uploads is not exists
-if not os.path.isdir(UPLOAD_FOLDER):
-    os.mkdir(UPLOAD_FOLDER)
-
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# Allowed extension you can set your own
-ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
-
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-
-@app.route('/upload', methods=['POST'])
+'''
+@app.route('/upload', methods=['GET'])
 def upload_form():
     return render_template('upload.html')
-def upload_file():
-    if request.method == 'POST':
+'''
+#######################################
 
-        if 'files[]' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
+'''
+API stuff below
+'''
 
-        files = request.files.getlist('files[]')
 
-        for file in files:
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+def removeImage(fPath):
+		'''
+		Removes image; utility for /render/
+		'''
+		try:
+			os.remove(fPath)
+		except:
+			pass #tbd figure out what to do during exception
 
-        flash('File(s) successfully uploaded')
-        return redirect('/viewDeck')
+
+def renderImage(path):
+		'''
+		Renders image sent to it in queue. Will return no text if error.
+
+		Schema
+		error boolean : self explanatory
+		error_message str : copy of error
+		rendered_text str : string of results; returns None if error
+		'''
+		try:
+			result = pytesseract.image_to_string(path, timeout=5)
+			removeImage(path)
+			return jsonify({
+				"error":False,
+				"error_message":None,
+				"rendered_text":result
+				})
+		except TypeError as t:
+			return jsonify({
+				"error": True,
+				"error_message":str(t),
+				"rendered_text":None
+				})
+		except RuntimeError as r:
+			return jsonify({
+				"error": True,
+				"error_message":str(r),
+				"rendered_text":None
+				})
+		except:
+			return jsonify({
+				"error": True,
+				"error_message":"Unknown Error, check logs",
+				"rendered_text":None
+				})
+
+@app.route("/api", methods=['GET'])
+def index():
+		'''
+		Testing if server is alive; don't use in production
+
+		Schema
+		error boolean : returns true if no errors; elsewise false
+		error_message str: returns an error message if error is true, elsewise is None
+		'''
+		try:
+			return jsonify({
+				"error":False,
+				"error_message":None
+				})
+
+		except Exception as e:
+			return jsonify({
+				"error":True,
+				"error_message":str(e)})
+
+
+
+@app.route("/api/render", methods=["POST"])
+def render():
+		'''
+
+		Utility for adding Images for our queue.
+
+		IF successful, will upload the image into the folder and queue the renderImage() function
+
+		Elsewise will return error
+
+		Schema:
+		Error bool
+		Error_message str
+		Result str
+
+		For more info see : https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
+		https://stackoverflow.com/questions/65483152/how-to-upload-file-to-flask-application-with-python-requests
+		'''
+
+		#checking if file has correct file path
+
+		filename = secure_filename(request.files['file'].filename)
+
+		if filename.rsplit(".", 1)[1].lower() not in ALLOWED_EXTENSIONS:
+			return jsonify({
+				"error":True,
+				"error_message":"File Type not Allowed",
+				"result": None
+				})
+		if request.method == "POST":
+
+			if 'file' not in request.files.keys():
+				return jsonify({
+					"error":True,
+					"error_message": "Upload not Found!",
+					"result": None
+					})
+			file = request.files['file']
+
+			if file.filename == "":
+				return jsonify({
+					"error":True,
+					"error_message": "No Selected File",
+					"result":None
+					})
+			else:
+				filename = secure_filename(file.filename)
+				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+				#uploading file ^^^
+				try:
+					result = renderImage(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+					return jsonify({
+		            	"error":False,
+		            	"error_message": None,
+		            	"result": re.split("\n\n",json.loads(result.data)["rendered_text"])
+		            	})
+				except Exception as e:
+					return jsonify({"error":True,
+		            	"error_message": str(e),
+		            	"result":None
+		            	})

@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 pytesseract.pytesseract.tesseract_cmd = "/usr/local/Cellar/tesseract/5.1.0/bin/tesseract"
 #might make a config file for this ^^^ will update
-UPLOAD_FOLDER = "/Users/user/Desktop/Final Proj/FinalProject/microservices/tesseract/uploads"
+UPLOAD_FOLDER = "/Users/user/Desktop/Final Proj/FinalProject/app/uploads"
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg"]
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #---------
@@ -86,7 +86,7 @@ def index():
 				"error_message":None
 				})
 
-		except Exception as e:	
+		except Exception as e:
 			return jsonify({
 				"error":True,
 				"error_message":str(e)})
@@ -96,15 +96,15 @@ def index():
 @app.route("/api/render", methods=["POST"])
 def render():
 		'''
-		
-		Utility for adding Images for our queue. 
+
+		Utility for adding Images for our queue.
 
 		IF successful, will upload the image into the folder and queue the renderImage() function
 
 		Elsewise will return error
 
 		Schema:
-		Error bool 
+		Error bool
 		Error_message str
 		Result str
 
@@ -154,10 +154,3 @@ def render():
 		            	"error_message": str(e),
 		            	"result":None
 		            	})
-
-
-
-
-
-
-

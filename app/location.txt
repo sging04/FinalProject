@@ -1,2 +1,2 @@
 Below just list the directory for the tesseract and nothing else; NO NEW LINE
-C:\\Program Files\\Tesseract-OCR
+/usr/local/Cellar/tesseract/5.1.0/bin/tesseract

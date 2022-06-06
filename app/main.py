@@ -25,9 +25,8 @@ app.secret_key = os.urandom(32)
 
 db_file = "data.db"
 
-pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR"
+pytesseract.pytesseract.tesseract_cmd = TESSERACT_LOCATION
 #might make a config file for this ^^^ will update
-UPLOAD_FOLDER = "C:\\Users\\Gingm\\Desktop\\Finalproject\\FinalProject\\app\\uploads"
 ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg"]
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -147,34 +146,15 @@ def renderImage(path):
 				"error_message":str(r),
 				"rendered_text":None
 				})
-		except:
+		except Exception as e:
 			return jsonify({
 				"error": True,
-				"error_message":"Unknown Error, check logs",
+				"error_message":str(e),
 				"rendered_text":None
 				})
 
-@app.route("/api", methods=['GET'])
-def index():
-		'''
-		Testing if server is alive; don't use in production
-
-		Schema
-		error boolean : returns true if no errors; elsewise false
-		error_message str: returns an error message if error is true, elsewise is None
-		'''
-		try:
-			return jsonify({
-				"error":False,
-				"error_message":None
-				})
-
-		except Exception as e:
-			return jsonify({
-				"error":True,
-				"error_message":str(e)})
-
-
+#############
+#API VVVV
 
 @app.route("/api/render", methods=["POST"])
 def render():
@@ -197,23 +177,26 @@ def render():
 
 		#checking if file has correct file path
 
-		filename = secure_filename(request.files['file'].filename)
+		file = request.files.get("file")
 
-		if filename.rsplit(".", 1)[1].lower() not in ALLOWED_EXTENSIONS:
+		filename = secure_filename(file.filename)
+
+		'''if filename.rsplit(".", 1)[1].lower() not in ALLOWED_EXTENSIONS:
 			return jsonify({
 				"error":True,
 				"error_message":"File Type not Allowed",
 				"result": None
-				})
+				})'''
+
+
 		if request.method == "POST":
 
-			if 'file' not in request.files.keys():
+			if 'file' not in request.files.keys() or :
 				return jsonify({
 					"error":True,
 					"error_message": "Upload not Found!",
 					"result": None
 					})
-			file = request.files['file']
 
 			if file.filename == "":
 				return jsonify({
@@ -230,7 +213,7 @@ def render():
 					return jsonify({
 		            	"error":False,
 		            	"error_message": None,
-		            	"result": re.split("\n\n",json.loads(result.data)["rendered_text"])
+		            	"result": json.loads(result.data)["rendered_text"].split("\n\n")
 		            	})
 				except Exception as e:
 					return jsonify({"error":True,

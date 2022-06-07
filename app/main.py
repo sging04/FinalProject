@@ -54,8 +54,20 @@ def disp_loginpage():
         return render_template( 'login.html' )
 
 
-@app.route("/signup", methods=["POST","GET"])
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
+    if "username" in session:
+        return redirect("/")
+
+    if request.method == "GET":
+        return render_template("signup.html")
+    if request.method == "POST":
+            username = request.form.get("name", default="")
+            password = request.form.get("password", default="")
+            password2 = request.form.get("password2", default="")
+
+
+
     if session['username'] is not none:
         redirect("/")
     if request.method == "GET":
@@ -201,7 +213,7 @@ def render():
 				try:
 					result = renderImage(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 					return render_template(
-						"create_pt2.html", 
+						"create_pt2.html",
 						content = json.loads(result.data)["rendered_text"]
 						)
 

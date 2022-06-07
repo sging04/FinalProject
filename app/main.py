@@ -35,12 +35,15 @@ userpass = UsernamePasswordTable(db_file, "userpass")
 decks = QuestionSetTable(db_file, "decks")
 #---------
 
-
+def logged_in():
+    """Returns logged in or not."""
+    print(session.keys())
+    return 'username' in session.keys()
 
 
 @app.route("/",  methods=["GET"])
 def disp_loginpage():
-    if (not session.get("username") is None):
+    if loggedin():
         # if
         # if there's an existing session, shows welcome page
         if request.method == "GET":

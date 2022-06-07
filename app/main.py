@@ -41,19 +41,14 @@ decks = QuestionSetTable(db_file, "decks")
 @app.route("/",  methods=["GET"])
 def disp_loginpage():
     if (not session.get("username") is None):
-        # if
-        # if there's an existing session, shows welcome page
-        if request.method == "GET":
-            # if there's an existing session, shows welcome page
-            return redirect("/home")
-
-    if ("username" != None):
+    	return render_template("home.html")
+    else:
         return render_template( 'login.html' )
 
 
 @app.route("/signup", methods=["POST","GET"])
 def signup():
-    if session['username'] is not none:
+    if session.get("username") is not None:
         redirect("/")
     if request.method == "GET":
         return render_template("signup.html")

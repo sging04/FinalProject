@@ -35,60 +35,57 @@ userpass = UsernamePasswordTable(db_file, "userpass")
 decks = QuestionSetTable(db_file, "decks")
 #---------
 
-def logged_in():
-    """Returns logged in or not."""
-    print(session.keys())
-    return 'username' in session.keys()
 
 
 @app.route("/",  methods=["GET"])
 def disp_loginpage():
-<<<<<<< HEAD
-    if (not session.get("username") is None):
-    	return render_template("home.html")
-    else:
-=======
-    if loggedin():
-        # if
-        # if there's an existing session, shows welcome page
-        if request.method == "GET":
-            # if there's an existing session, shows welcome page
-            return redirect("/home")
+	if (not session.get("username") is None): 
+		# if the session exists
+		return render_template(
+			"home.html",
+			username=session["username"],
+			decks = decks.getRandomEntries(8))
+	else:
+		 return render_template( 'login.html' )
 
-    if ("username" != None):
->>>>>>> fe8eb8715346cd5316d39cdabf8e56f521fb665b
-        return render_template( 'login.html' )
+
+@app.route("/login", methods=["POST", "GET"])
+def login():
+	if request.method == "POST":
+		username = request.form["username"]
+		password = request.form["password"]
+
+		if userpass.passMatch(username, password):
+			session["username"] = username
+			return redirect("/")
+
+		else:
+			pass
+			#flash some sort of error back at them
+	
+	
+	return render_template("login.html")
+
+
 
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-<<<<<<< HEAD
+
     if session.get("username") is not None:
-=======
-    if "username" in session:
         return redirect("/")
 
     if request.method == "GET":
         return render_template("signup.html")
-    if request.method == "POST":
-            username = request.form.get("name", default="")
-            password = request.form.get("password", default="")
-            password2 = request.form.get("password2", default="")
 
-
-
-    if session['username'] is not none:
->>>>>>> fe8eb8715346cd5316d39cdabf8e56f521fb665b
-        redirect("/")
-    if request.method == "GET":
-        return render_template("signup.html")
     elif request.method == "POST":
-        username= request.args['username']
-        password= request.args['password']
-        passauth= request.args['passauth']
-        userpass.insert(username, password) # committing actions to database must be done every time you commit a command
-        session["username"]=username
-        return redirect("/home", username=session.get("username"))
+        username= request.form['username']
+        password= request.form['password']
+        passauth= request.form['passauth']
+        userpass.insert(username, password) 
+		# committing actions to database must be done every time you commit a command
+        session["username"] = username
+        return redirect("/")
 
 
 @app.route("/home", methods=["GET"])
@@ -118,7 +115,7 @@ def create():
 def viewDeck(id):
     return render_template(
         "viewDeck.html",
-        data=decks.getDeckByID(id))
+        deck=decks.getDeckByID(id))
 
 '''
 @app.route('/upload', methods=['GET'])
@@ -151,8 +148,9 @@ def renderImage(path):
 		error_message str : copy of error
 		rendered_text str : string of results; returns None if error
 		'''
+
 		try:
-			result = pytesseract.image_to_string(path, timeout=5)
+			result = pytesseract.image_to_string(path)
 			removeImage(path)
 			return jsonify({
 				"error":False,
@@ -228,4 +226,5 @@ def render():
 						)
 
 				except Exception as e:
+
 					return render_template("create.html")

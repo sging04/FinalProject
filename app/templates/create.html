@@ -5,11 +5,10 @@
 
     <div class="mt-4 p-5 text-black rounded">
       <img src="/static/golang.jpg" class="img-responsive">
-      <hr>
-      <bold> <h1>
 
-        Hello, upload your photos to use. </h1>
-        </bold>
+      <hr>
+      
+      <bold><h1>Hello, upload your photos to use. </h1></bold>
 
         <form action="/render" method="POST" enctype="multipart/form-data">
             <label for="f" class="form-label">Multiple files are supported</label>
@@ -17,12 +16,7 @@
             <button type="submit" id=:formFileMultiple class="btn btn-secondary mb-3">Submit </button>
         </form>
 
+        </div>
     </div>
-</div>
-
-
-
-
-
 
   {% endblock %}

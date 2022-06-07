@@ -159,10 +159,9 @@ def renderImage(path):
 #############
 #API VVVV
 
-@app.route("/api/render", methods=["POST"])
+@app.route("/render", methods=["POST"])
 def render():
 		'''
-
 		Utility for adding Images for our queue.
 
 		IF successful, will upload the image into the folder and queue the renderImage() function
@@ -177,9 +176,7 @@ def render():
 		For more info see : https://flask.palletsprojects.com/en/1.1.x/patterns/fileuploads/
 		https://stackoverflow.com/questions/65483152/how-to-upload-file-to-flask-application-with-python-requests
 		'''
-
 		#checking if file has correct file path
-
 		file = request.files.get("file")
 
 		filename = secure_filename(file.filename)
@@ -191,35 +188,22 @@ def render():
 				"result": None
 				})'''
 
-
 		if request.method == "POST":
 
-			if 'file' not in request.files.keys() or :
-				return jsonify({
-					"error":True,
-					"error_message": "Upload not Found!",
-					"result": None
-					})
+			if 'file' not in request.files.keys() or file.filename == "":
+				return render_template("create.html")
 
-			if file.filename == "":
-				return jsonify({
-					"error":True,
-					"error_message": "No Selected File",
-					"result":None
-					})
 			else:
+
 				filename = secure_filename(file.filename)
 				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 				#uploading file ^^^
 				try:
 					result = renderImage(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-					return jsonify({
-		            	"error":False,
-		            	"error_message": None,
-		            	"result": json.loads(result.data)["rendered_text"].split("\n\n")
-		            	})
+					return render_template(
+						"create_pt2.html", 
+						content = json.loads(result.data)["rendered_text"]
+						)
+
 				except Exception as e:
-					return jsonify({"error":True,
-		            	"error_message": str(e),
-		            	"result":None
-		            	})
+					return render_template("create.html")

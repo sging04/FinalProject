@@ -23,3 +23,10 @@ patrickG/seanG -- 2022-05-30 to 2022-06-05
   - Finished the microservice
   - Adding templating and the basic pathing
   - to be updates
+
+
+patrickG - 2022-06-07 
+
+  - New templating
+  - Finally fixed bugs in /render/
+  

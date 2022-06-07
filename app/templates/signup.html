@@ -13,6 +13,23 @@
         <input type="submit" name="sub1" value="Sign Up">
         <br>
         <br>
+
+        <div class="cell">
+          <form method="POST">
+                  <label for="name">Username:</label>
+                  <input type="text" name="name" id="name" required>
+                  <label for="name">Password:</label>
+                  <input type="password" name="password" id="password" required>
+                  <label for="name">Enter Password Again:</label>
+                  <input type="password" name="password2" id="password2" required>
+                  {% if error != "" %}
+                  <p style="color:red">{{ error }}</p>
+                  {% endif %}
+                  <button class="submit button" name="register" id="register">Submit</button>
+              </form>
+        </div>
+
+
       <a href="/login.html">Already Have an Account? Log in</a>
 
       {% endblock %}

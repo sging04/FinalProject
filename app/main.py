@@ -35,20 +35,50 @@ userpass = UsernamePasswordTable(db_file, "userpass")
 decks = QuestionSetTable(db_file, "decks")
 #---------
 
-
+def logged_in():
+    """Returns logged in or not."""
+    print(session.keys())
+    return 'username' in session.keys()
 
 
 @app.route("/",  methods=["GET"])
 def disp_loginpage():
+<<<<<<< HEAD
     if (not session.get("username") is None):
     	return render_template("home.html")
     else:
+=======
+    if loggedin():
+        # if
+        # if there's an existing session, shows welcome page
+        if request.method == "GET":
+            # if there's an existing session, shows welcome page
+            return redirect("/home")
+
+    if ("username" != None):
+>>>>>>> fe8eb8715346cd5316d39cdabf8e56f521fb665b
         return render_template( 'login.html' )
 
 
-@app.route("/signup", methods=["POST","GET"])
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
+<<<<<<< HEAD
     if session.get("username") is not None:
+=======
+    if "username" in session:
+        return redirect("/")
+
+    if request.method == "GET":
+        return render_template("signup.html")
+    if request.method == "POST":
+            username = request.form.get("name", default="")
+            password = request.form.get("password", default="")
+            password2 = request.form.get("password2", default="")
+
+
+
+    if session['username'] is not none:
+>>>>>>> fe8eb8715346cd5316d39cdabf8e56f521fb665b
         redirect("/")
     if request.method == "GET":
         return render_template("signup.html")
@@ -193,7 +223,7 @@ def render():
 				try:
 					result = renderImage(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 					return render_template(
-						"create_pt2.html", 
+						"create_pt2.html",
 						content = json.loads(result.data)["rendered_text"]
 						)
 

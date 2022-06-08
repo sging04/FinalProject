@@ -8,6 +8,7 @@ Sample Entry: firstL -- TIMESTAMP\n ( e.g.: topherM -- 1999-12-31 23:59 )
 Begin Devlog:
 
 seanG -- 2022-05-24 08:19am
+
   - Devlog txt. Working on proper implementation of project: REACT, flask, 
     apache.
 
@@ -24,13 +25,18 @@ patrickG/seanG -- 2022-05-30 to 2022-06-05
   - Adding templating and the basic pathing
   - to be updates
 
-
 patrickG - 2022-06-07 
 
   - New templating
   - Finally fixed bugs in /render/
   
 patrickG seanG - 2022-06-07 10:10
+
   - Fixed bug where the sessions weren't working
   - Fixed sign up and log in
   - needs flashing of errors, templating, and perhaps better error safety
+
+aryamanG -- 2022-06-06
+
+ - Redesigned the login and signup pages
+ - fixed authentication and routing

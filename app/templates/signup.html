@@ -1,26 +1,46 @@
-{% extends "login.html" %}
+<!DOCTYPE html>
+<html>
 
-    {% block content %}
+  <head>
+    <title> SIGN UP PAGE </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href ="../static/css/styles.css" rel ="stylesheet" type ="text/css">
+  </head>
 
-      <center>
+  <body class="bg-light d-flex flex-column vw-100 vh-100 align-items-center justify-content-center">
 
-        <form action="/signup" method="POST">
-          <h4>Username: </h4>
-          <input type="text" name="username">
-          <br>
-          <h4>Password: </h4>
-          <input type="password" name="password">
-         <h4>Confirm Password: </h4>
-         <input type="password" name="passauth">
-          <br>
-          <input type="submit" name="sub1" value="Sign Up">
-          <br>
-          <br>  
+    {% if error_message %}
+    <div class="alert alert-danger" role="alert">
+      {{error_message}}
+    </div>
+  {% endif %}
 
-          <a href="/">Already Have an Account? Log in</a>
+    <h1>
+      Welcome to the signup page!
+    </h1>
 
-      </center>
+    <h3>
+      Create your account below!
+    </h3>
+      <form action="/signup" method="POST" class="bg-white p-5 mt-5 rounded-2 d-flex justify-content-stretch flex-column" style="width: 100%; max-width: 500px; grid-gap: 24px;">
+        <div class="d-flex flex-column align-items-left">
+          <label for="" class="text-left">Username:</label>
+          <input class="form-control" type="text" name="new_username">
+        </div>
+        <div class="">
+          <label for="">Password:</label>
+          <input  class="form-control" type="password" name="new_password">
+        </div>
+        <div class="">
+          <label for="">Confirm Password:</label>
+        <input  class="form-control" type="password" name="confirm_password">
+        </div>
+        <input class="btn btn-primary" type="submit" name="sub1" value="Register">
+        <div class="d-flex justify-content-center" style="grid-gap: 12px;">
+          <a href="/login">Login</a>
+        </div>
+      </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </body>
 
-
-
-      {% endblock %}
+</html>

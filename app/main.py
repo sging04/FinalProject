@@ -1,130 +1,182 @@
-from flask import Flask, request, redirect, session, render_template, url_for, jsonify
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from flask import Flask, request, redirect, session, render_template, \
+    url_for, jsonify
 import json
 import os
 import sqlite3
 import requests as r
-from database import UsernamePasswordTable, QuestionSetTable #using database classes
+from database import UsernamePasswordTable, QuestionSetTable  # using database classes
 
-#misc imports
+# misc imports
+
 import pytesseract
 from werkzeug.utils import secure_filename
 import os
 import json
 
 #######################
-#api stuff
-
+# api stuff
 
 from setup import TESSERACT_LOCATION, UPLOAD_FOLDER
 
-#--------
+# --------
 # config stuffs dont touch!
 
-app= Flask(__name__)
+app = Flask(__name__)
 app.secret_key = os.urandom(32)
 
-db_file = "data.db"
+db_file = 'data.db'
 
-pytesseract.pytesseract.tesseract_cmd = TESSERACT_LOCATION
-#might make a config file for this ^^^ will update
-ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg"]
+pytesseract.pytesseract.tesseract_cmd = \
+    'C:\\Program Files\\Tesseract-OCR'
+
+# might make a config file for this ^^^ will update
+
+UPLOAD_FOLDER = \
+    'C:\\Users\\Gingm\\Desktop\\Finalproject\\FinalProject\\app\\uploads'
+ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-
-userpass = UsernamePasswordTable(db_file, "userpass")
-decks = QuestionSetTable(db_file, "decks")
-#---------
+userpass = UsernamePasswordTable(db_file, 'userpass')
+decks = QuestionSetTable(db_file, 'decks')
 
 
+# ---------
 
-@app.route("/",  methods=["GET"])
-def disp_loginpage():
-	if (not session.get("username") is None): 
-		# if the session exists
-		return render_template(
-			"home.html",
-			username=session["username"],
-			decks = decks.getRandomEntries(8))
-	else:
-		 return render_template( 'login.html' )
+# Utility function to check if there is a session
+
+def logged_in():
+    return session.get('username') is not None
 
 
-@app.route("/login", methods=["POST", "GET"])
+@app.route('/', methods=['GET'])
+def landing():
+    if logged_in():
+        return render_template('home.html')
+    else:
+        return render_template('login.html')
+
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-	if request.method == "POST":
-		username = request.form["username"]
-		password = request.form["password"]
+    method = request.method
 
-		if userpass.passMatch(username, password):
-			session["username"] = username
-			return redirect("/")
+    # Check for session existance
 
-		else:
-			render_template("login.html", syntaxterror="Username and Password don't Match!")
-	
-	#if method is get
-	return render_template("login.html")
+    if method == 'GET':
+        if logged_in():
+            return redirect(url_for('landing'))
+        else:
 
+        # If not logged in, show login page
 
+            return render_template('login.html', error=False)
 
+    if method == 'POST':
 
+      # Get information from request.form since it is submitted via post
 
-@app.route("/signup", methods=["GET", "POST"])
-def signup():
+        username = request.form['username']
+        password = request.form['password']
 
-    if session.get("username") is not None:
-        return redirect("/")
+    if userpass.passMatch(username, password):
 
-    if request.method == "GET":
-        return render_template("signup.html")
+        # If incorrect, give feedback to the user
 
-    elif request.method == "POST":
-        username= request.form['username']
-        password= request.form['password']
-        passauth= request.form['passauth']
-        userpass.insert(username, password) 
-		# committing actions to database must be done every time you commit a command
-        session["username"] = username
-        return redirect("/")
+        session['username'] = username
+        return redirect(url_for('landing'))
+    else:
+        return render_template('login.html',
+                               error='Username or Password are Incorrect'
+                               )
 
 
-@app.route("/home", methods=["GET"])
+@app.route('/signup', methods=['GET', 'POST'])
+def register():
+    method = request.method
+
+    # Check for session existence
+
+    if method == 'GET':
+        if logged_in():
+            return redirect(url_for('landing'))
+        else:
+
+            # If not logged in, show regsiter page
+
+            return render_template('signup.html', error_message='')
+
+    if method == 'POST':
+        username = request.form['new_username']
+        password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+
+        error_message = ''
+        if not username:
+            error_message = 'Error: No username entered!'
+        elif not password:
+            error_message = 'Error: No password entered!'
+        elif confirm_password != password:
+            error_message = 'Error: Passwords do not match!'
+
+        if error_message:
+            return render_template('signup.html',
+                                   error_message=error_message)
+        else:
+
+            # userpass.insert(username, password)
+
+            session['username'] = username
+            return redirect(url_for('landing'))
+
+
+# @app.route("/signup", methods=["POST","GET"])
+# def signup():
+#     if session['username'] is not none:
+#         redirect("/")
+#     if request.method == "GET":
+#         return render_template("signup.html")
+#     elif request.method == "POST":
+#         username= request.args['username']
+#         password= request.args['password']
+#         passauth= request.args['passauth']
+#         userpass.insert(username, password) # committing actions to database must be done every time you commit a command
+#         session["username"]=username
+#         return redirect("/home", username=session.get("username"))
+
+@app.route('/home', methods=['GET'])
 def home():
 
-	if not (session.get("username") is None):
-	    return render_template(
-	        "home.html",
-	        username=session.get("username"),
-	        decks = decks.getRandomEntries(10)
-	        )
-
-	return redirect("/")
+    return render_template('home.html', username=session.get('username'
+                           ), decks=decks.getRandomEntries(10))
 
 
-@app.route("/logout")
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    #if "username" in session:
-    session.pop("username", None)
-    return redirect('/')
+
+    # Once again check for a key before popping it
+
+    if logged_in():
+        session.pop('username')
+
+    # After logout, return to login page
+
+    return redirect(url_for('landing'))
 
 
-
-@app.route("/create", methods=["GET"])
+@app.route('/create', methods=['GET'])
 def create():
-    return render_template("create.html" )
+    return render_template('create.html')
 
 
-@app.route("/viewDeck/<id>", methods=["GET"])
+@app.route('/viewDeck/<id>', methods=['GET'])
 def viewDeck(id):
-    return render_template(
-        "viewDeck.html",
-        deck=decks.getDeckByID(id))
+    return render_template('viewDeck.html', data=decks.getDeckByID(id))
 
-'''
-@app.route('/upload', methods=['GET'])
-def upload_form():
-    return render_template('upload.html')
-'''
+
+
 #######################################
 
 '''

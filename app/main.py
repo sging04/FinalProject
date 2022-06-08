@@ -60,11 +60,11 @@ def login():
 			return redirect("/")
 
 		else:
-			pass
-			#flash some sort of error back at them
+			render_template("login.html", syntaxterror="Username and Password don't Match!")
 	
-	
+	#if method is get
 	return render_template("login.html")
+
 
 
 
@@ -91,16 +91,19 @@ def signup():
 @app.route("/home", methods=["GET"])
 def home():
 
-    return render_template(
-        "home.html",
-        username=session.get("username"),
-        decks = decks.getRandomEntries(10)
-        )
+	if not (session.get("username") is None):
+	    return render_template(
+	        "home.html",
+	        username=session.get("username"),
+	        decks = decks.getRandomEntries(10)
+	        )
+
+	return redirect("/")
+
 
 @app.route("/logout")
 def logout():
     #if "username" in session:
-    session["username"] = None
     session.pop("username", None)
     return redirect('/')
 
@@ -214,17 +217,46 @@ def render():
 				return render_template("create.html")
 
 			else:
-
 				filename = secure_filename(file.filename)
 				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 				#uploading file ^^^
-				try:
-					result = renderImage(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+				#try:
+				if True:
+					'''result = renderImage(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+					paragraphed_text = json.loads(result.data)["rendered_text"].split("\n")
+					
+
+					questionPairs = () # tuple full of 
+
+					for i in range(len(paragraphed_text)):
+						if i > len(paragraphed_text):
+							break
+
+						elif i == len(paragraphed_text):
+							questionPairs.append(
+								{"question": paragraphed_text[i], 
+								 "answer": "" 
+								 }
+								)
+							break
+						else:
+							questionPairs.append({
+								"question": paragraphed_text[i],
+								"answer": paragraphed_text[i+1]
+									}
+								)
+					'''
+					questionPairs = ({"question": "question", "answer": "answer"},
+									{"question": "question", "answer": "answer"},
+									{"question": "question", "answer": "answer"},
+									{"question": "question", "answer": "answer"})
+
+
 					return render_template(
 						"create_pt2.html",
-						content = json.loads(result.data)["rendered_text"]
+						content = str(questionPairs)
 						)
 
-				except Exception as e:
+				'''except Exception as e:
 
-					return render_template("create.html")
+					return render_template("create.html")'''

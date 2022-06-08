@@ -6,7 +6,6 @@
     <div class="container d-flex align-items-center justify-content-center">
       <div>
         Enter your username and password.
-          <p style="color:red">{{syntaxerror}}</p>
           <form action="/login" method="POST">
             <h4>Username: </h4>
             <input type="text" name="username">
@@ -21,6 +20,9 @@
             <a href="/signup">Don't Have an Account? Sign Up</a>
           </form>
           <br>
+
+          <p style="color : red;">{{syntaxerror}}</p>
+
         </div>
       </div>
 

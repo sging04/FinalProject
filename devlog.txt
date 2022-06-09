@@ -50,3 +50,4 @@ patrickG seanG -- 2022-06-09
  - Implemented insertDummyData.py where you can insert some dummy data into decks
  - Fixed problem where there was an infinite "recursion" (idk how else to describe) in /login
  - Fixed error where /signUp wasn't interfering with the database
+ - Added /download pathway

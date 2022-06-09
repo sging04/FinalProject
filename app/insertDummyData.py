@@ -14,13 +14,13 @@ decks = QuestionSetTable(DB_FILE, 'decks')
 userpass.insert("pat", "pat")
 print(userpass.passMatch("pat", "pat"))
 
+decks.insert("s", "a", "as", "as")
+
 for i in range(10, 20):
 	decks.insert(
 		f'Title {i}',
 		f'Author {i}',
 		f'Description {i}',
-		str((
-			({"question" : f'QUESTION {i}', "answer" : "ANSWER 1"},
-			 {"question" : "question 2 ", "answer": "answer 2"})
-			))
+		str([{"question" : "QUESTION {}".format(i), "answer" : "ANSWER 1"},
+			 {"question" : "question 2 ", "answer": "answer 2"}])
 		)

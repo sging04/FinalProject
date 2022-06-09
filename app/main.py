@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request, redirect, session, render_template, \
-    url_for, jsonify
+    url_for, jsonify, send_from_directory
 import json
 import os
 import sqlite3
@@ -15,7 +15,7 @@ import pytesseract
 from werkzeug.utils import secure_filename
 import os
 import json
-
+import csv
 #######################
 # api stuff
 
@@ -183,6 +183,25 @@ def viewDeck(id):
 '''
 API stuff below
 '''
+
+@app.route("/download/<id>", methods=["GET"])
+def toCSV(id):
+	data = decks.getDeckByID(id)[0]
+	cards = json.loads(data[4].replace("\'","\""))
+
+	#^^^ if this is confusing see the docs on this func
+	name = f'./CSV/{data[1]}_by_{data[2]}.csv'
+
+
+	with open(name, "w") as f:
+		writer = csv.writer(f,delimiter=",")
+		writer.writerow(["question", "answer"])
+
+		for pair in cards:
+			writer.writerow([pair.get("question"), pair.get("answer")])
+
+	return send_from_directory("./CSV", f'{data[1]}_by_{data[2]}.csv')
+
 
 
 def removeImage(fPath):

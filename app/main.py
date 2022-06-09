@@ -29,13 +29,10 @@ app.secret_key = os.urandom(32)
 
 db_file = 'data.db'
 
-pytesseract.pytesseract.tesseract_cmd = \
-    'C:\\Program Files\\Tesseract-OCR'
-
+pytesseract.pytesseract.tesseract_cmd = UPLOAD_FOLDER
 # might make a config file for this ^^^ will update
 
-UPLOAD_FOLDER = \
-    'C:\\Users\\Gingm\\Desktop\\Finalproject\\FinalProject\\app\\uploads'
+UPLOAD_FOLDER = "./uploads"
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 

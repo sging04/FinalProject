@@ -1,0 +1,37 @@
+{% extends "index.html" %}
+
+	{% block content %}
+
+		{% if length == 0 %}
+			<center>
+				<br>
+				<h2 style="color:red;">0 results found!</h2>
+
+				<a href="/home" class="btn btn-outline-success">Go back home!</a>
+			</center>
+
+		{% else %}
+
+			<center>
+				<br>
+				<h2>{{ length }} results found!</h2>
+			</center>
+		{% endif %}
+
+		{% for result in results %}
+				<center>
+				<div class = "justify-content-left" style="width: 30%; text-align: left;">
+						<div class="card" style="border: 2px solid black;">
+							<h5 class="card-title mt-2">{{ result[1] }}</h5>
+						    <h6 class="card-subtitle mb-2 text-muted">By {{ result[2] }}</h6>
+						    <p class="card-text">{{ result[3] }}</p>
+						    <center>
+						    	<a href="/viewDeck/{{ result[0] }}" class="btn btn-primary mb-2" style="width: 40%;">View Deck!</a>
+						    </center>
+			    		</div>
+	    	    </div>
+    		</center>
+    		<br>
+		{% endfor %}
+
+	{% endblock %}

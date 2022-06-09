@@ -1,7 +1,3 @@
 flask
-requests
-redis
-rq
 pytesseract
 pytest
-gunicorn

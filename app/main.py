@@ -164,6 +164,35 @@ def logout():
 
     return redirect("/")
 
+@app.route("/search", methods=["GET","POST"])
+def search():
+
+	if request.method == "GET":
+		return redirect("/home")
+
+	query = request.form.get("query")
+
+	results = decks.search(query)
+
+	return render_template("search.html", length = len(results), results=results)
+
+@app.route("/addDeck", methods=["POST"])
+def addDeck():
+	'''
+	Insert in the code from the form when it comes
+	'''
+	if logged_in():
+		title = ""
+		description = ""
+		content = ""
+		decks.insert(
+			title,
+			session.get("username"),
+			description,
+			content
+			)
+
+		return redirect("/home")
 
 @app.route('/create', methods=['GET'])
 def create():

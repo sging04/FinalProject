@@ -54,3 +54,7 @@ patrickG seanG -- 2022-06-09
 
  patrickG -- 2022-06-09
  - Fixed bug where cards wouldn't render
+
+ patrickG -- 2022-06-09
+
+ - Implemented search

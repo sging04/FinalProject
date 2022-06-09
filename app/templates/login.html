@@ -29,6 +29,10 @@
       </div>
       <input class="btn btn-primary" type="submit" name="sub1" value="Login">
       <a href = "/signup"> Register Here</a>
+
+      {% if isError %}
+        <h6 style="color: red;">{{ error }}</h6>
+      {% endif %}
     </form>
 
 

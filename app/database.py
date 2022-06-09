@@ -32,7 +32,7 @@ class QuestionSetTable:
 		self._db = sqlite3.connect(fileName, check_same_thread=False)
 		self._cursor = self._db.cursor()
 		self._name = name
-		self._cursor.execute(f"CREATE TABLE IF NOT EXISTS {self._name}(title TEXT, author TEXT, description TEXT,content TEXT, unique(title, content));")
+		self._cursor.execute(f"CREATE TABLE IF NOT EXISTS {self._name} (title TEXT, author TEXT, description TEXT,content TEXT, unique(title, content));")
 
 	def insert(self,title, author, description,content):
 		'''
@@ -143,7 +143,7 @@ class UsernamePasswordTable:
 		self._db = sqlite3.connect(fileName, check_same_thread=False)
 		self._cursor = self._db.cursor()
 		self._name = name
-		self._cursor.execute(f"CREATE TABLE IF NOT EXISTS {self._name}(username TEXT, password TEXT, unique(username));")
+		self._cursor.execute(f"CREATE TABLE IF NOT EXISTS {self._name} (username TEXT, password TEXT, unique(username));")
 
 	def insert(self,username, password):
 		'''

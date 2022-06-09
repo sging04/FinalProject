@@ -40,3 +40,13 @@ aryamanG -- 2022-06-06
 
  - Redesigned the login and signup pages
  - fixed authentication and routing
+
+patrickG seanG -- 2022-06-09
+ - Fixed error in rendering /home
+ - Fixed security issues with /home /create
+ - Fixed login issue and added in the {{ error }} functionality
+ - Fixed broken redirects/render_templates
+ - Fixed interfacing with the database
+ - Implemented insertDummyData.py where you can insert some dummy data into decks
+ - Fixed problem where there was an infinite "recursion" (idk how else to describe) in /login
+ - Fixed error where /signUp wasn't interfering with the database

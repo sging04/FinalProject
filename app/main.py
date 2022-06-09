@@ -48,15 +48,15 @@ decks = QuestionSetTable(db_file, 'decks')
 # Utility function to check if there is a session
 
 def logged_in():
-    return session.get('username') is not None
+    return  not (session.get('username') is None)
 
 
 @app.route('/', methods=['GET'])
 def landing():
     if logged_in():
-        return render_template('home.html')
+        return redirect("/home")
     else:
-        return render_template('login.html')
+        return render_template("login.html")
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -71,7 +71,6 @@ def login():
         else:
 
         # If not logged in, show login page
-
             return render_template('login.html', error=False)
 
     if method == 'POST':
@@ -81,16 +80,19 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-    if userpass.passMatch(username, password):
 
-        # If incorrect, give feedback to the user
+        if userpass.passMatch(username, password):
 
-        session['username'] = username
-        return redirect(url_for('landing'))
-    else:
-        return render_template('login.html',
-                               error='Username or Password are Incorrect'
-                               )
+	        # If incorrect, give feedback to the user
+
+	        session['username'] = username
+	        return redirect(url_for('landing'))
+
+        else:
+	        return render_template('login.html',
+	        					   isError=True,
+	                               error='Username or Password are Incorrect'
+	                               )
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -126,7 +128,7 @@ def register():
                                    error_message=error_message)
         else:
 
-            # userpass.insert(username, password)
+            userpass.insert(username, password)
 
             session['username'] = username
             return redirect(url_for('landing'))
@@ -148,10 +150,10 @@ def register():
 
 @app.route('/home', methods=['GET'])
 def home():
+	if logged_in():
+		return render_template('home.html', username=session.get('username'), decks=decks.getRandomEntries(10))
 
-    return render_template('home.html', username=session.get('username'
-                           ), decks=decks.getRandomEntries(10))
-
+	return redirect("/")
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
@@ -163,13 +165,15 @@ def logout():
 
     # After logout, return to login page
 
-    return redirect(url_for('landing'))
+    return redirect("/")
 
 
 @app.route('/create', methods=['GET'])
 def create():
-    return render_template('create.html')
+	if logged_in():
+		return render_template('create.html')
 
+	return redirect("/")
 
 @app.route('/viewDeck/<id>', methods=['GET'])
 def viewDeck(id):

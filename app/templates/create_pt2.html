@@ -1,7 +1,24 @@
 {% extends "index.html" %}
 
 	{% block content %}
-
-	{{ content }}
+	<div class="bg-light d-flex flex-column vw-50 vh-50 align-items-center justify-content-center">
+		<form action="/signup" method="POST" class="bg-white p-5 mt-5 rounded-2 d-flex justify-content-center flex-column" style="width: 100%; max-width: 500px; grid-gap: 24px;">
+       		<div class="d-flex flex-column align-items-left">
+          		<label for="" class="text-left">Title</label>
+          		<input class="form-control" type="textarea">
+        	</div>
+        	<div class="">
+          		<label for="">Description</label>
+		  		<br>
+        		<textarea class ="form-control" type="textarea" rows="3"></textarea>
+        	</div>
+			<label for="">Questions</label>
+			{{ content }}
+        	<input class="btn btn-primary" type="submit" name="sub1" value="Submit">
+        	<div class="d-flex justify-content-center" style="grid-gap: 12px;">
+          		<a href="/home">Back to Home</a>
+        	</div>
+      	</form>
+	</div>
 
 	{% endblock %}

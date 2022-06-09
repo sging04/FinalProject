@@ -51,3 +51,6 @@ patrickG seanG -- 2022-06-09
  - Fixed problem where there was an infinite "recursion" (idk how else to describe) in /login
  - Fixed error where /signUp wasn't interfering with the database
  - Added /download pathway
+
+ patrickG -- 2022-06-09
+ - Fixed bug where cards wouldn't render

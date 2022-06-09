@@ -174,7 +174,17 @@ def create():
 
 @app.route('/viewDeck/<id>', methods=['GET'])
 def viewDeck(id):
-    return render_template('viewDeck.html', data=decks.getDeckByID(id))
+	cards = json.loads(
+		decks.getDeckByID(id)[0][4]
+		.replace("\'","\""))
+
+	'''
+	What's going on ^^^^
+
+	Well, JSON doesn't recognize '', so we replace it before
+	we load it.
+	'''
+	return render_template('viewDeck.html', deck=cards)
 
 
 

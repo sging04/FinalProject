@@ -28,7 +28,7 @@ Once you have that location, go to location.txt in the app folder and replace th
 Once done.
 
 ```
-$ git clone https://github.com/sging04/
+$ git clone git@github.com:sging04/FinalProject.git
 $ cd FinalProject
 $ pip3 install -r requirements.txt
 $ python3 -m venv <name>

@@ -1,29 +1,46 @@
 {% extends "index.html" %}
 
 	{% block content %}
+		<br>
+
+		<center>
+			<h1>Create Deck!</h1>	
+		</center>
+
 	<div class="bg-light d-flex flex-column vw-50 vh-50 align-items-center justify-content-center">
-		<form action="/signup" method="POST" class="bg-white p-5 mt-5 rounded-2 d-flex justify-content-center flex-column" style="width: 100%; max-width: 500px; grid-gap: 24px;">
+
+		<form action="/sendcards" method="POST" class="bg-white p-5 mt-5 rounded-2 d-flex justify-content-center flex-column" style="width: 100%; max-width: 500px; grid-gap: 24px;">
        		<div class="d-flex flex-column align-items-left">
           		<label for="" class="text-left">Title</label>
-          		<input class="form-control" type="textarea">
+          		<input class="form-control" type="textarea" name="title">
         	</div>
         	<div class="">
           		<label for="">Description</label>
 		  		<br>
-        		<textarea class ="form-control" type="textarea" rows="3"></textarea>
+        		<textarea class ="form-control" type="textarea" rows="3" name="description"></textarea>
         	</div>
+			
+			<!-- 
 			<label for="">Current Data</label>
 			{{ content }}
-			<div class="d-flex align-items-center">
-				<div>
-					<label for="">Question</label>
-					<textarea class="form-control" type="textarea" rows="3" >Render Question</textarea>
-				</div>
-				<div>
-					<label for="">Answer</label>
-					<textarea class="form-control" type="textarea" rows="3">Render Answer</textarea>
-				</div>
-		 	</div>
+
+		-->
+
+				{% for item in content %}
+					<div class="d-flex align-items-center">
+
+						<div>
+							<label for="">Question</label>
+							<textarea class="form-control" type="textarea" rows="3" name="question_{{ loop.index0 }}" >{{ item["question"] }}</textarea>
+						</div>
+						<div>
+							<label for="">Answer</label>
+							<textarea class="form-control" type="textarea" rows="3" name="answer_{{ loop.index0 }}">{{ item["answer"] }}</textarea>
+						</div>
+					</div>
+
+				{% endfor %}
+
         	<input class="btn btn-primary" type="submit" name="sub1" value="Submit">
 			
         	<div class="d-flex justify-content-center" style="grid-gap: 12px;">

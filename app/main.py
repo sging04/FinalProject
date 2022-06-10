@@ -29,10 +29,10 @@ app.secret_key = os.urandom(32)
 
 db_file = 'data.db'
 
-pytesseract.pytesseract.tesseract_cmd = UPLOAD_FOLDER
+pytesseract.pytesseract.tesseract_cmd = TESSERACT_LOCATION
 # might make a config file for this ^^^ will update
 
-UPLOAD_FOLDER = "./uploads"
+UPLOAD_FOLDER = ".\\uploads"
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -215,7 +215,13 @@ def viewDeck(id):
     Well, JSON doesn't recognize '', so we replace it before
     we load it.
     '''
-    return render_template('viewDeck.html', deck=cards, title = title, author = author, description = description)
+    return render_template(
+    	'viewDeck.html', 
+    	deck=cards, 
+    	title = title, 
+    	author = author, 
+    	description = description,
+    	id= id,)
 
 
 
@@ -264,9 +270,9 @@ def renderImage(path):
 		error_message str : copy of error
 		rendered_text str : string of results; returns None if error
 		'''
+		result = pytesseract.image_to_string(path)
 
 		try:
-			result = pytesseract.image_to_string(path)
 			removeImage(path)
 			return jsonify({
 				"error":False,
@@ -334,18 +340,22 @@ def render():
 				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 				#uploading file ^^^
 				#try:
-				if True:
-					'''result = renderImage(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-					paragraphed_text = json.loads(result.data)["rendered_text"].split("\n")
-					
+				if True: #sorry I was too lazy to change the indentation, sublime
+					# was making it a pain
+					result = renderImage(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-					questionPairs = () # tuple full of 
 
-					for i in range(len(paragraphed_text)):
-						if i > len(paragraphed_text):
-							break
+					paragraphed_text = [
+							item for item in json.loads(result.data)["rendered_text"].split("\n")
+							if item != "" and item != "\n"]
+					#tesseract is eager to place around the newlines lmao
 
-						elif i == len(paragraphed_text):
+					questionPairs = []
+
+					for i in range(0,len(paragraphed_text),2):
+
+
+						if i == len(paragraphed_text)-1:
 							questionPairs.append(
 								{"question": paragraphed_text[i], 
 								 "answer": "" 
@@ -358,18 +368,45 @@ def render():
 								"answer": paragraphed_text[i+1]
 									}
 								)
-					'''
-					questionPairs = ({"question": "question", "answer": "answer"},
+					
+					'''questionPairs = ({"question": "question", "answer": "answer"},
 									{"question": "question", "answer": "answer"},
 									{"question": "question", "answer": "answer"},
-									{"question": "question", "answer": "answer"})
-
+									{"question": "question", "answer": "answer"})'''
 
 					return render_template(
 						"create_pt2.html",
-						content = str(questionPairs)
+						content = questionPairs
 						)
 
 				'''except Exception as e:
 
 					return render_template("create.html")'''
+
+@app.route("/sendcards", methods=["POST"])
+def sendcards():
+	title = request.form.get("title")
+	description = request.form.get("description")
+
+	cards = []
+
+	num_of_pairs = int((len(request.form.keys()) - 3 ) / 2)
+
+	for i in range(num_of_pairs):
+		cards.append(
+			{
+			"question" : request.form.get(f"question_{i}"),
+			"answer" : request.form.get(f"answer_{i}"),
+			}
+		)
+
+	return {"data":cards}
+
+	decks.insert(
+		title,
+		session.get("username"),
+		description,
+		str(cards)
+		)
+
+	return redirect("/home")

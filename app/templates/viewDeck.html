@@ -5,6 +5,10 @@
 		<h1 class = "display-2">{{ title }}</h1>
 		<h2 class  = "text-muted">By: {{ author }}</h2>
 		<h3 class = "lead">{{ description }}</h3>
+
+		<a href="/download/{{ id }}" class="btn btn-outline-success">Download as CSV!</a>
+
+
 		{% for card in deck  %}
 		<div class="bg-white p-5 mt-5 rounded-2 d-flex justify-content-center flex-column text-center" style="width: 100%; max-width: 500px; grid-gap: 24px; font-size: 20px;" >
 			<span">{{ card["question"] }} <strong>|</strong> {{ card["answer"] }}</span> 

@@ -32,7 +32,7 @@ db_file = 'data.db'
 pytesseract.pytesseract.tesseract_cmd = TESSERACT_LOCATION
 # might make a config file for this ^^^ will update
 
-UPLOAD_FOLDER = ".\\uploads"
+UPLOAD_FOLDER = ".\\uploads" if os.name == "nt" else "./uploads"
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg']
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -400,7 +400,6 @@ def sendcards():
 			}
 		)
 
-	return {"data":cards}
 
 	decks.insert(
 		title,
@@ -410,3 +409,14 @@ def sendcards():
 		)
 
 	return redirect("/home")
+
+
+
+
+'''
+404 page VVV
+'''
+
+@app.errorhandler(404)
+def pageNotFound(error):
+	return redirect("/")

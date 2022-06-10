@@ -12,9 +12,20 @@
 		  		<br>
         		<textarea class ="form-control" type="textarea" rows="3"></textarea>
         	</div>
-			<label for="">Questions</label>
+			<label for="">Current Data</label>
 			{{ content }}
+			<div class="d-flex align-items-center">
+				<div>
+					<label for="">Question</label>
+					<textarea class="form-control" type="textarea" rows="3" >Render Question</textarea>
+				</div>
+				<div>
+					<label for="">Answer</label>
+					<textarea class="form-control" type="textarea" rows="3">Render Answer</textarea>
+				</div>
+		 	</div>
         	<input class="btn btn-primary" type="submit" name="sub1" value="Submit">
+			
         	<div class="d-flex justify-content-center" style="grid-gap: 12px;">
           		<a href="/home">Back to Home</a>
         	</div>

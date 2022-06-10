@@ -1,13 +1,14 @@
 {% extends "index.html" %}
 	
 	{% block content %}
-	<div class = "text-center">
-		<h1>{{ title }}</h1>
-		<h2>{{ author }}</h2>
-		<h3>{{ description }}</h3>
+	<div class = "bg-light d-flex flex-column vw-50 vh-50 align-items-center justify-content-center">
+		<h1 class = "display-2">{{ title }}</h1>
+		<h2 class  = "text-muted">By: {{ author }}</h2>
+		<h3 class = "lead">{{ description }}</h3>
 		{% for card in deck  %}
-		<h2>{{ card }}</h2>
-		
+		<div class="bg-white p-5 mt-5 rounded-2 d-flex justify-content-center flex-column text-center" style="width: 100%; max-width: 500px; grid-gap: 24px; font-size: 20px;" >
+			<span">{{ card["question"] }} <strong>|</strong> {{ card["answer"] }}</span> 
+		</div>
 		{% endfor %}
 	</div>
 	{% endblock %}

@@ -36,3 +36,7 @@ $ source <name>/bin/activate
 $ cd app
 $ python3 __init__.py
 ```
+
+For a live video demonstration see : https://youtu.be/-ZD6DB1obtw
+
+Have fun and stay safe guys and have a phenomenal summer!

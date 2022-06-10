@@ -21,8 +21,14 @@ Tesseract installation instructions
 https://tesseract-ocr.github.io/tessdoc/Installation.html
 DIFFERENT FOR UBUNTU, MAC, WINDOWS, which CAN'T be simplified into a list on a read me, since it is so long.
 
+Then find the location of tesseract's bin (or the exe if you happen to be on windows). If you're a windows user, you can start at the program files, but if you're on something else, start with ```which tesseract``` and following it until you approach the location of the program.
+
+Once you have that location, go to location.txt in the app folder and replace the second line with the location you just copied.
+
+Once done.
+
 ```
-$ git clone https://github.com/sging04/Magikarp_wdong20_hgan20_sging20_rzheng21
+$ git clone https://github.com/sging04/
 $ cd FinalProject
 $ pip3 install -r requirements.txt
 $ python3 -m venv <name>

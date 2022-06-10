@@ -80,17 +80,16 @@ def login():
 
         if userpass.passMatch(username, password):
 
-	        # If incorrect, give feedback to the user
+            # If incorrect, give feedback to the user
 
-	        session['username'] = username
-	        return redirect(url_for('landing'))
+            session['username'] = username
+            return redirect(url_for('landing'))
 
         else:
-	        return render_template('login.html',
-	        					   isError=True,
-	                               error='Username or Password are Incorrect'
-	                               )
-
+            return render_template('login.html',
+                                   isError=True,
+                                   error='Username or Password are Incorrect'
+                                   )
 
 @app.route('/signup', methods=['GET', 'POST'])
 def register():
@@ -203,17 +202,20 @@ def create():
 
 @app.route('/viewDeck/<id>', methods=['GET'])
 def viewDeck(id):
-	cards = json.loads(
-		decks.getDeckByID(id)[0][4]
-		.replace("\'","\""))
+    data = decks.getDeckByID(id)[0]
 
-	'''
-	What's going on ^^^^
+    #(5, 'Title', 'author', 'desc', 'Content')
+    title = data[1]
+    author = data[2]
+    description = data[3]
+    cards = json.loads(data[4].replace("\'","\""))
+    '''
+    What's going on ^^^^
 
-	Well, JSON doesn't recognize '', so we replace it before
-	we load it.
-	'''
-	return render_template('viewDeck.html', deck=cards)
+    Well, JSON doesn't recognize '', so we replace it before
+    we load it.
+    '''
+    return render_template('viewDeck.html', deck=cards, title = title, author = author, description = description)
 
 
 
